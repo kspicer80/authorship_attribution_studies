@@ -141,6 +141,7 @@ for file in c_file_list:
 
 for file in j_file_list:
     j_data = get_data(file)
+
 all_texts = c_data + j_data
 
 #create_index(all_texts, 'word_index_test.json')
