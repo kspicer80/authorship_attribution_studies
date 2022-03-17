@@ -8,6 +8,9 @@ from nltk.classify import NaiveBayesClassifier
 from nltk.classify import DecisionTreeClassifier
 from nltk.metrics.scores import *
 import collections
+import glob
+from sklearn.model_selection import train_test_split
+from sklearn.naive_bayes import GaussianNB
 
 def bag_of_words(words):
 	return dict([(word, True) for word in words])
@@ -102,45 +105,76 @@ def high_information_words(labelled_words, score_fn=BigramAssocMeasures.chi_sq, 
     return high_info_words
 
 #print(movie_reviews.categories())
-lfeats = label_feats_from_corpus(movie_reviews)
+#lfeats = label_feats_from_corpus(movie_reviews)
 #print(lfeats.keys())
-train_feats, test_feats = split_label_feats(lfeats)
-#print(len(train_feats))
-#print(len(test_feats))
-
-nb_classifier = NaiveBayesClassifier.train(train_feats)
-#print(nb_classifier.labels())
-
-negfeattest = bag_of_words(['this', 'plot', 'was', 'so', 'silly', 'and', 'stupid'])
-#print(nb_classifier.classify(negfeattest))
-
-posfeattest = bag_of_words(['this', 'book', 'is', 'so', 'good', 'I', "can't", 'stop', 'reading', 'it'])
-#print(nb_classifier.classify(posfeattest))
-
-from nltk.classify.util import accuracy
+#print(lfeats.values())
+#train_feats, test_feats = split_label_feats(lfeats)
+##print(len(train_feats))
+##print(len(test_feats))
+#
+#nb_classifier = NaiveBayesClassifier.train(train_feats)
+##print(nb_classifier.labels())
+#
+#negfeattest = bag_of_words(['this', 'plot', 'was', 'so', 'silly', 'and', 'stupid'])
+##print(nb_classifier.classify(negfeattest))
+#
+#posfeattest = bag_of_words(['this', 'book', 'is', 'so', 'good', 'I', "can't", 'stop', 'reading', 'it'])
+##print(nb_classifier.classify(posfeattest))
+#
+#from nltk.classify.util import accuracy
+##print(accuracy(nb_classifier, test_feats))
+#
+#probs = nb_classifier.prob_classify(test_feats[0][0])
+##print(probs.prob('pos'))
+##print(test_feats[0][0])
+#
+##print(nb_classifier.most_informative_features(n=5))
+##print(nb_classifier.show_most_informative_features(n=5))
+#
+#dt_classifier = DecisionTreeClassifier.train(train_feats, binary=True, #entropy_cutoff=0.8, depth_cutoff=5, support_cutoff=30)
+##print(accuracy(dt_classifier, test_feats))
+#
+#nb_precisions, nb_recalls = precision_recall(nb_classifier, test_feats)
+##print(nb_precisions, nb_recalls)
+#
+#labels = movie_reviews.categories()
+#labeled_words = [(l, movie_reviews.words(categories=[l])) for l in labels]
+#high_info_words = set(high_information_words(labeled_words))
+#feat_det = lambda words: bag_of_words_in_set(words, high_info_words)
+#lfeats = label_feats_from_corpus(movie_reviews, feature_detector=feat_det)
+#train_feats, test_feats = split_label_feats(lfeats)
+#
+#nb_classifier = NaiveBayesClassifier.train(train_feats)
 #print(accuracy(nb_classifier, test_feats))
+#nb_precisions, nb_recalls = precision_recall(nb_classifier, test_feats)
+#print(nb_precisions['pos'], nb_recalls['pos'])
 
-probs = nb_classifier.prob_classify(test_feats[0][0])
-#print(probs.prob('pos'))
-#print(test_feats[0][0])
+cather_files = glob.glob(r'C:\Users\KSpicer\Documents\GitHub\cather_jewett_comparisons\training_data\train0\*.txt')
+jewett_files = glob.glob(r'C:\Users\KSpicer\Documents\GitHub\cather_jewett_comparisons\training_data\train1\*.txt')
+# 0 for Cather's texts; 1 for Jewett's texts
 
-#print(nb_classifier.most_informative_features(n=5))
-#print(nb_classifier.show_most_informative_features(n=5))
+data = []
+target = []
+for file in cather_files:
+	with open(file, encoding='utf-8') as f:
+		data.append(f.read())
+		target.append(0)
+for file in jewett_files:
+	with open(file, encoding='utf-8') as f:
+		data.append(f.read())
+		target.append(1)
 
-#dt_classifier = DecisionTreeClassifier.train(train_feats, binary=True, entropy_cutoff=0.8, depth_cutoff=5, support_cutoff=30)
-#print(accuracy(dt_classifier, test_feats))
+X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.5, random_state=0
 
-nb_precisions, nb_recalls = precision_recall(nb_classifier, test_feats)
-#print(nb_precisions, nb_recalls)
+zipped_data = dict(zip(data, target))
 
-labels = movie_reviews.categories()
-labeled_words = [(l, movie_reviews.words(categories=[l])) for l in labels]
-high_info_words = set(high_information_words(labeled_words))
-feat_det = lambda words: bag_of_words_in_set(words, high_info_words)
-lfeats = label_feats_from_corpus(movie_reviews, feature_detector=feat_det)
-train_feats, test_feats = split_label_feats(lfeats)
-
-nb_classifier = NaiveBayesClassifier.train(train_feats)
-print(accuracy(nb_classifier, test_feats))
-nb_precisions, nb_recalls = precision_recall(nb_classifier, test_feats)
-print(nb_precisions['pos'], nb_recalls['pos'])
+def split_label_feats(lfeats, split=0.75):
+    train_feats = []
+    test_feats = []
+    for label, feats in lfeats.items():
+        cutoff = int(len(feats) * split)
+        train_feats.extend([(feat, label) for feat in feats[:cutoff]])
+        test_feats.extend([(feat, label) for feat in feats[cutoff:]])
+    return train_feats, test_feats
+	
+training, testing = split_label_feats(zipped_data)
