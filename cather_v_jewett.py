@@ -130,7 +130,6 @@ def train_model(model, tt_data, val_size=.3, epochs=1, batch_size=16):
     model_results = model.evaluate(testing_data, testing_labels)
     return(model)
 
-<<<<<<< HEAD
 def plot_model_loss(model_name, string_1='loss', string_2='val_loss'):
     plt.plot(model_name.history[string_1])
     plt.plot(model_name.history[string_2])
@@ -153,20 +152,6 @@ c_file_list = glob.glob('/Users/spicy.kev/Desktop/cather_jewett_comparisons/data
 c_file_list = sorted(c_file_list)
 
 j_file_list = glob.glob('/Users/spicy.kev/Desktop/cather_jewett_comparisons/data_folder/jewett/*.txt')
-=======
-def plot_graphs(history, string):
-  plt.plot(history.history[string])
-  plt.plot(history.history['val_'+string])
-  plt.xlabel("Epochs")
-  plt.ylabel(string)
-  plt.legend([string, 'val_'+string])
-  plt.show()
-  
-c_file_list = glob.glob(r'C:\Users\KSpicer\Documents\GitHub\cather_jewett_comparisons\training_data\cather\*.txt')
-c_file_list = sorted(c_file_list)
-
-j_file_list = glob.glob(r'C:\Users\KSpicer\Documents\GitHub\cather_jewett_comparisons\training_data\jewett\*.txt')
->>>>>>> 94e052e7e7ed2e2532828b7d71c24abb4fe0172a
 j_file_list = sorted(j_file_list)
 
 for file in c_file_list:
@@ -179,11 +164,7 @@ all_texts = c_data + j_data
 
 #create_index(all_texts, 'word_index_test.json')
 
-<<<<<<< HEAD
 word_index = get_index('/Users/spicy.kev/Desktop/cather_jewett_comparisons/word_index_test.json')
-=======
-word_index = get_index(r'C:\Users\KSpicer\Documents\GitHub\cather_jewett_comparisons\word_index_test.json')
->>>>>>> 94e052e7e7ed2e2532828b7d71c24abb4fe0172a
 reverse_word_index = reverse_index(word_index)
 
 j_sents = create_sents(j_data)
@@ -231,20 +212,11 @@ def write_test(results, filename, name):
         for result in results:
             f.write(str(result)+'\n')
 
-<<<<<<< HEAD
 #t_file = '/Users/spicy.kev/Desktop/cather_jewett_comparisons/testing_data/jewett/mate_of_the_daylight.txt'
 t_file = '/Users/spicy.kev/Desktop/cather_jewett_comparisons/testing_data/hemingway/sun_also_rises.txt'
-=======
-#t_file = r'C:\Users\KSpicer\Documents\GitHub\cather_jewett_comparisons\testing_data\hemingway\sun_also_rises.txt'
-t_file = r'C:\Users\KSpicer\Documents\GitHub\cather_jewett_comparisons\testing_data\jewett\mate_of_the_daylight.txt'
->>>>>>> 94e052e7e7ed2e2532828b7d71c24abb4fe0172a
 t_text = get_data(t_file)
 t_sents = create_sents(t_text)
 t_padded = padding_data(t_sents, word_index, maxlen=25)
 
 test_results = test_model(t_padded, reverse_word_index=reverse_word_index, model=model)
-<<<<<<< HEAD
 write_test(test_results[0], filename='heminway_results', name='Sun Also Rises')
-=======
-write_test(test_results[0], filename='hemingway', name='The Sun Also Rises')
->>>>>>> 94e052e7e7ed2e2532828b7d71c24abb4fe0172a
