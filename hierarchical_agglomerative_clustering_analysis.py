@@ -50,19 +50,19 @@ def load_directory(directory, max_length):
 directory = "./training_data/"
 test_directory = "./testing_data/"
 
-with open('./testing_data/j_mate_of_the_daylight.txt') as f:
-    data = f.read()
-    data = data.lower().split()
-
-print(len(data))
+#with open('./testing_data/j_mate_of_the_daylight.txt') as f:
+    #data = f.read()
+    #data = data.lower().split()
+#print(len(data))
     
 documents, authors, titles = load_directory(directory, 20000)
-test_documents, test_authors, test_titles = load_directory(test_directory, 7753)
-
+test_documents, test_authors, test_titles = load_directory(test_directory, 7752)
+print(test_authors)
 print(test_titles)
+
 vectorizer = text.CountVectorizer(token_pattern=r"(?u)\b\w\w+\b")
 v_documents = vectorizer.fit_transform(documents).toarray()
-v_documents = preprocessing.normalize(v_documents.astype(float), norm='l1')
+v_documents = preprocessing.normalize(v_documents.astype(np.float64), 'l1')
 scaler = preprocessing.StandardScaler()
 v_documents = scaler.fit_transform(v_documents)
 
@@ -98,4 +98,4 @@ def plot_tree(linkage_object, labels, figsize=(15, 15), ax=None):
     plt.show()
 
 #plot_tree(linkage_object, titles)
-plot_tree(linkage_object_all, authors + test_titles)
+plot_tree(linkage_object_all, titles + test_titles)
