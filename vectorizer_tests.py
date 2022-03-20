@@ -14,12 +14,12 @@ class Delta:
         self.scaler = preprocessing.StandardScaler(with_mean=False)
         self.train_X = self.scaler.fit_transform(X)
         return self
-    
+
     def predict(self, X, metric='cityblock'):
         X = self.scaler.transform(X)
         dists = scidist.cdist(X, self.train_X, metric=metric)
         return self.train_y[np.argmin(dists, axis=1)]
-        
+
 # Loading our data:
 def load_directory(directory, max_length):
     documents, authors, titles = [], [], []
@@ -27,27 +27,25 @@ def load_directory(directory, max_length):
         if not filename.name.endswith('.txt'):
             continue
         author, _ = os.path.splitext(filename.name)
-        
+
         with open(filename.path, encoding='utf-8') as f:
             contents = f.read()
         contents = strip_headers(contents)
         lemmas = contents.lower().split()
         start_idx, end_idx, segm_cnt = 0, max_length, 1
-        
+
         while end_idx < len(lemmas):
             documents.append(' '. join(lemmas[start_idx:end_idx]))
             authors.append(author[0])
             title = filename.name.replace('.txt', '').split('_')[1]
-            #filename.name.replace('.txt', '').split('_')[0]
-            #print(title)
             titles.append(f"{title}-{segm_cnt}")
-            
+
             start_idx += max_length
             end_idx += max_length
             segm_cnt += 1
-    
+
     return documents, authors, titles
-    
+
 directory = "./training_data/"
 
 documents, authors, titles = load_directory(directory, 10000)
@@ -83,7 +81,7 @@ test_size = len(set(authors)) * 2
 
 #print(f'N={train_documents.shape[0]} test documents with '
       #f'V{train_documents.shape[1]} features.')
-      
+
 scaler = preprocessing.StandardScaler()
 scaler.fit(train_documents)
 train_documents = scaler.transform(train_documents)
@@ -100,8 +98,8 @@ preds = delta.predict(test_documents)
 
 for true, pred in zip(test_authors, preds):
     _connector = 'WHEREAS' if true != pred else 'and'
-    #print(f'Observed author is {true} {_connector} {pred} was predicted.') 
-    
+    #print(f'Observed author is {true} {_connector} {pred} was predicted.')
+
 accuracy = metrics.accuracy_score(preds, test_authors)
 #print(f'\nAccuracy of predictions: {accuracy:.1f}')
 
