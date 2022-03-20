@@ -81,4 +81,3 @@ def plot_confusion_matrix(cm, classes, normalize=False, title='confusion matrix'
 cm = confusion_matrix(y_test, predictions)
 plot_confusion_matrix(cm, classes=['j', 'c'], normalize=False, title='confusion matrix')
 print(cm)
-		
