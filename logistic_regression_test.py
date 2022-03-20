@@ -39,38 +39,26 @@ Y_test = testing_data['author'].values
 def extract_features(df,field,training_data,testing_data,type="binary"):
     """Extract features using different methods"""
     logging.info("Extracting features and creating vocabulary...")
-    
     if "binary" in type:
-        
         # BINARY FEATURE REPRESENTATION
         cv= CountVectorizer(binary=True, max_df=0.95)
         cv.fit_transform(training_data[field].values)
-        
         train_feature_set=cv.transform(training_data[field].values)
         test_feature_set=cv.transform(testing_data[field].values)
-        
         return train_feature_set,test_feature_set,cv
-  
     elif "counts" in type:
-        
         # COUNT BASED FEATURE REPRESENTATION
         cv= CountVectorizer(binary=False, max_df=0.95)
         cv.fit_transform(training_data[field].values)
-        
         train_feature_set=cv.transform(training_data[field].values)
-        test_feature_set=cv.transform(testing_data[field].values)
-        
+        test_feature_set=cv.transform(testing_data[field].values)        
         return train_feature_set,test_feature_set,cv
-    
     else:    
-        
         # TF-IDF BASED FEATURE REPRESENTATION
         tfidf_vectorizer=TfidfVectorizer(use_idf=True, max_df=0.95)
         tfidf_vectorizer.fit_transform(training_data[field].values)
-        
         train_feature_set=tfidf_vectorizer.transform(training_data[field].values)
         test_feature_set=tfidf_vectorizer.transform(testing_data[field].values)
-        
         return train_feature_set,test_feature_set,tfidf_vectorizer
 
 X_train, X_test, feature_transformer = extract_features(df, 'text', training_data, testing_data, type='binary')
@@ -91,37 +79,27 @@ def get_top_k_predictions(model,X_test,k):
     return preds
 
 def train_model(df,field="text",feature_rep="binary",top_k=3):
-    
     logging.info("Starting model training...")
-    
     # GET A TRAIN TEST SPLIT (set seed for consistent results)
     training_data, testing_data = train_test_split(df,random_state = 2000,)
-
     # GET LABELS
     Y_train=training_data['author'].values
     Y_test=testing_data['author'].values
-     
     # GET FEATURES
     X_train,X_test,feature_transformer=extract_features(df,field,training_data,testing_data,type=feature_rep)
-
     # INIT LOGISTIC REGRESSION CLASSIFIER
     logging.info("Training a Logistic Regression Model...")
     scikit_log_reg = LogisticRegression(verbose=1, solver='liblinear',random_state=0, C=5, penalty='l2',max_iter=1000)
     model=scikit_log_reg.fit(X_train,Y_train)
-
     # GET TOP K PREDICTIONS
     preds=get_top_k_predictions(model,X_test,top_k)
-    
     # GET PREDICTED VALUES AND GROUND TRUTH INTO A LIST OF LISTS - for ease of evaluation
     eval_items=collect_preds(Y_test,preds)
-    
     # GET EVALUATION NUMBERS ON TEST SET -- HOW DID WE DO?
     logging.info("Starting evaluation...")
     accuracy=compute_accuracy(eval_items)
     mrr_at_k=compute_mrr_at_k(eval_items)
-    
     logging.info("Done training and evaluation.")
-    
     return model,feature_transformer,accuracy,mrr_at_k
     
 def compute_mrr_at_k(items:list):
