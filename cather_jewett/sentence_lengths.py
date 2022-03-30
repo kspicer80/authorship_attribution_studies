@@ -26,7 +26,7 @@ from strip_headers_and_footers import strip_headers
 #cather_list = glob.glob('/Volumes/GoogleDrive-113389011671541578812/My Drive/DHStuff/projects/cather_jewett_comparisons/data_folder/cather/*.txt')
 #jewett_list = glob.glob('/Volumes/GoogleDrive-113389011671541578812/My Drive/DHStuff/projects/cather_jewett_comparisons/data_folder/jewett/*.txt')
 
-cather_file_names = glob.glob(r'C:\Users\Kspicer\Documents\GitHub\authorship_attribution_studies\cather_jewett\data_folder\cather\*.txt')
+cather_file_names = glob.glob('./data_folder/cather/*.txt')
 cather_file_names = sorted(cather_file_names)
 print(cather_file_names)
 cather_labels = sorted(cather_file_names)
@@ -56,11 +56,15 @@ for filename in cather_file_names:
 #lengths_of_cather_sentences = [16.534602076124568, 16.19121140142518, 14.928874734607218, 19.26351931330472, 18.182510148849797, 16.172173522139808, 16.9465306122449, 25.85636856368564, 16.44207920792079, 17.65152140988572, 17.69668759471747, 19.880056777856637]
 #lengths_of_jewett_sentences = [24.871145731905226, 30.50354259350799, 27.356521739130436, 27.604920405209842, 31.91920463126101, 25.74780553679946, 31.169653179190753, 24.75655629139073, 25.91968400263331, 26.365143824027072]
 
-cdict = dict(zip(cather_labels, mean_sentence_lengths))
+cather_plot_labels = ["A Lost Lady", "Alexander's Bridge", "April Twilight", "Archbishop", "Bright Medusa", "My Antonia", "O Pioneers", "One of Ours", "Paul's Case", "Song of the Lark", "Stories", "The Professor's House", "The Troll Garden"]
+positions = range(len(cather_labels))
+
+cdict = dict(zip(cather_plot_labels, mean_sentence_lengths))
 #jdict = dict(zip(jewett_labels, lengths_of_jewett_sentences))
 
+
 plt.bar(range(len(cather_labels)), mean_sentence_lengths)
-plt.xticks(range(len(cather_labels)), cather_labels, rotation=90)
+plt.xticks(positions, cather_plot_labels, rotation=90)
 plt.show()
 
 #plt.bar(range(len(jdict)), list(jdict.values()))
