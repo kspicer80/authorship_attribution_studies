@@ -219,4 +219,4 @@ t_sents = create_sents(t_text)
 t_padded = padding_data(t_sents, word_index, maxlen=25)
 
 test_results = test_model(t_padded, reverse_word_index=reverse_word_index, model=model)
-write_test(test_results[0], filename='heminway_results', name='Sun Also Rises')
+write_test(test_results[0], filename='hemingway_results', name='Sun Also Rises')
