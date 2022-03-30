@@ -47,8 +47,8 @@ def load_directory(directory, max_length):
     
     return documents, authors, titles
     
-directory = "./training_data/"
-test_directory = "./testing_data/"
+directory = "./training_data" 
+test_directory = "./testing_data" 
 
 #with open('./testing_data/j_mate_of_the_daylight.txt') as f:
     #data = f.read()
@@ -98,7 +98,7 @@ def plot_tree(linkage_object, labels, figsize=(15, 15), ax=None):
     plt.show()
 
 #plot_tree(linkage_object, titles)
-plot_tree(linkage_object_all, titles + test_titles)
+plot_tree(linkage_object_all, titles + test_title)
 
 with open(r'C:\Users\KSpicer\Documents\GitHub\cather_jewett_comparisons\testing_data\c_archbishop.txt', encoding='utf-8') as f:
     data = f.read()
