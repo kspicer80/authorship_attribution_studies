@@ -6,6 +6,7 @@ from keras.preprocessing.text import text_to_word_sequence
 import random
 from tensorflow import keras
 import glob
+from pathlib import Path
 
 def get_data(filename):
     with open(filename, 'r', encoding='utf-8') as f:
@@ -149,11 +150,11 @@ def plot_model_accuracy(model_name, string_1='accuracy', string_2='val_accuracy'
     plt.legend(['train', 'val'], loc='lower right')
     plt.show()
 
-c_file_list = glob.glob('/Users/spicy.kev/Documents/github/authorship_attribution_studies/cather_jewett/data_folder/cather/*.txt')
+c_file_list = glob.glob(r'cather_jewett\data_folder\cather\*.txt')
 c_file_list = sorted(c_file_list)
 print(c_file_list)
 
-j_file_list = glob.glob('/Users/spicy.kev/Documents/github/authorship_attribution_studies/cather_jewett/data_folder/jewett/*.txt')
+j_file_list = glob.glob(r'cather_jewett\data_folder\jewett\*.txt')
 j_file_list = sorted(j_file_list)
 
 for file in c_file_list:
@@ -164,9 +165,9 @@ for file in j_file_list:
 
 all_texts = c_data + j_data
 
-create_index(all_texts, '/Users/spicy.kev/Documents/github/authorship_attribution_studies/cather_jewett/word_index_test.json')
+create_index(all_texts, r'cather_jewett\word_index_test.json')
 
-word_index = get_index('/Users/spicy.kev/Documents/github/authorship_attribution_studies/cather_jewett/word_index_test.json')
+word_index = get_index(r'cather_jewett\word_index_test.json')
 reverse_word_index = reverse_index(word_index)
 
 j_sents = create_sents(j_data)
@@ -215,10 +216,10 @@ def write_test(results, filename, name):
             f.write(str(result)+'\n')
 
 #t_file = '/Users/spicy.kev/Desktop/cather_jewett_comparisons/testing_data/jewett/mate_of_the_daylight.txt'
-t_file = '/Users/spicy.kev/Documents/github/authorship_attribution_studies/cather_jewett/testing_data/c_pauls_case.txt'
+t_file = r'cather_jewett\testing_data\j_mate_of_the_daylight.txt'
 t_text = get_data(t_file)
 t_sents = create_sents(t_text)
 t_padded = padding_data(t_sents, word_index, maxlen=25)
 
 test_results = test_model(t_padded, reverse_word_index=reverse_word_index, model=model)
-write_test(test_results[0], filename='pauls_case_test_results', name="Paul's Case")
+write_test(test_results[0], filename='mate_of_the_daylight', name="Mate of the Daylight")
