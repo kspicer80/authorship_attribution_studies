@@ -1,7 +1,7 @@
 import pandas as pd
 import matplotlib.pyplot as plt
 
-results = pd.read_csv('results.txt', header=None, sep=',')
+results = pd.read_csv('pauls_case_test_results.txt', header=None, sep=',')
 #print(results.head())
 results.rename(columns={0: 'prediction', 1: 'text'}, inplace=True)
 #print(results.head())
@@ -19,4 +19,8 @@ print((jewett_df.shape[0])/(results.shape[0]))
 
 predictions = results['cleaned_prediction']
 plt.plot(predictions)
+plt.clf()
+plt.scatter(predictions.index, predictions.values, alpha=0.4, color='mediumorchid')
+plt.xlabel("sentence")
+plt.ylabel("prediction")
 plt.show()
