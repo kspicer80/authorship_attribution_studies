@@ -128,6 +128,7 @@ def train_model(model, tt_data, val_size=.3, epochs=1, batch_size=16):
     plt.legend(['Train', 'Val'], loc='lower right')
     plt.show()
     model_results = model.evaluate(testing_data, testing_labels)
+    print(model_results)
     return(model)
 
 def plot_model_loss(model_name, string_1='loss', string_2='val_loss'):
@@ -148,10 +149,11 @@ def plot_model_accuracy(model_name, string_1='accuracy', string_2='val_accuracy'
     plt.legend(['train', 'val'], loc='lower right')
     plt.show()
 
-c_file_list = glob.glob('/Users/spicy.kev/Desktop/cather_jewett_comparisons/data_folder/cather/*.txt')
+c_file_list = glob.glob('/Users/spicy.kev/Documents/github/authorship_attribution_studies/cather_jewett/data_folder/cather/*.txt')
 c_file_list = sorted(c_file_list)
+print(c_file_list)
 
-j_file_list = glob.glob('/Users/spicy.kev/Desktop/cather_jewett_comparisons/data_folder/jewett/*.txt')
+j_file_list = glob.glob('/Users/spicy.kev/Documents/github/authorship_attribution_studies/cather_jewett/data_folder/jewett/*.txt')
 j_file_list = sorted(j_file_list)
 
 for file in c_file_list:
@@ -162,9 +164,9 @@ for file in j_file_list:
 
 all_texts = c_data + j_data
 
-#create_index(all_texts, 'word_index_test.json')
+create_index(all_texts, '/Users/spicy.kev/Documents/github/authorship_attribution_studies/cather_jewett/word_index_test.json')
 
-word_index = get_index('/Users/spicy.kev/Desktop/cather_jewett_comparisons/word_index_test.json')
+word_index = get_index('/Users/spicy.kev/Documents/github/authorship_attribution_studies/cather_jewett/word_index_test.json')
 reverse_word_index = reverse_index(word_index)
 
 j_sents = create_sents(j_data)
@@ -201,7 +203,7 @@ def test_model(text_chunks, reverse_word_index, model, cutoff=0):
             print(test)
             predict = model.predict([test])
             if predict[0] > cutoff:
-                print("Prediction: " +str(predict[0]))
+                print("Prediction: " + str(predict[0]))
                 results.append((str(predict[0]), reconst_text(test, reverse_word_index)))
     return(results, cutoff)
 
@@ -213,10 +215,10 @@ def write_test(results, filename, name):
             f.write(str(result)+'\n')
 
 #t_file = '/Users/spicy.kev/Desktop/cather_jewett_comparisons/testing_data/jewett/mate_of_the_daylight.txt'
-t_file = '/Users/spicy.kev/Desktop/cather_jewett_comparisons/testing_data/hemingway/sun_also_rises.txt'
+t_file = '/Users/spicy.kev/Documents/github/authorship_attribution_studies/cather_jewett/testing_data/c_pauls_case.txt'
 t_text = get_data(t_file)
 t_sents = create_sents(t_text)
 t_padded = padding_data(t_sents, word_index, maxlen=25)
 
 test_results = test_model(t_padded, reverse_word_index=reverse_word_index, model=model)
-write_test(test_results[0], filename='hemingway_results', name='Sun Also Rises')
+write_test(test_results[0], filename='pauls_case_test_results', name="Paul's Case")
