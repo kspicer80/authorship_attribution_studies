@@ -9,6 +9,7 @@ from numpy import dot
 from numpy.linalg import norm
 import os
 from strip_headers_and_footers import strip_headers
+from adjustText import adjust_text
 # import word2vec
 # import gensim
 # from gensim.test.utils import common_texts
@@ -38,7 +39,7 @@ documents, authors, titles = load_directory(data_folder)
 
 cjlwDocs = [nlp(text) for text in documents]
 
-cjlwVecs = [doc.vector for doc in documents]
+cjlwVecs = [doc.vector for doc in cjlwDocs]
 
 similarities = []
 for vec in cjlwDocs:
@@ -54,5 +55,5 @@ tsneOut = TSNE(n_components=2).fit_transform(pcaOut)
 xs, ys = tsneOut[:,0], tsneOut[:,1]
 for i in range(len(xs)):
     plt.scatter(xs[i], ys[i])
-    plt.annotate((authors)[i], (xs[i], ys[i]))
+    plt.annotate((authors[i], titles[i]), (xs[i], ys[i]))
 plt.show()
