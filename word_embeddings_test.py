@@ -28,8 +28,10 @@ def load_directory(directory):
         lemmas = contents.lower().split()
         documents.append(' '.join(lemmas))
         authors.append(author[0])
-        title = filename.name.replace('.txt', '').split('_')[1]
-        titles.append(f"{title}")
+        title = filename.name.replace('.txt', '')
+        split_title = title.split('_')[1:]
+        rejoined_title = '_'.join(split_title)
+        titles.append(f"{rejoined_title}")
 
     return documents, authors, titles
 
