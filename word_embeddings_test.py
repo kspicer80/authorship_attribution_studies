@@ -55,7 +55,16 @@ pcaOut = PCA(n_components=10).fit_transform(cjlwVecs)
 tsneOut = TSNE(n_components=2).fit_transform(pcaOut)
 
 xs, ys = tsneOut[:,0], tsneOut[:,1]
+colors = [1, 2, 3, 4]
+fig, ax = plt.subplots(figsize=(20,8))
 for i in range(len(xs)):
-    plt.scatter(xs[i], ys[i])
-    plt.annotate((authors[i], titles[i]), (xs[i], ys[i]))
+    ax.scatter(xs[i], ys[i], cmap='Set1')
+texts = []
+for i, txt in enumerate(zip(authors, titles)):
+    texts.append(ax.annotate(txt, xy=(xs[i], ys[i]), xytext=(xs[i], ys[i]+.3)))
+adjust_text(texts)
+
+#for i in range(len(xs)):
+    #plt.scatter(xs[i], ys[i])
+    #plt.annotate((authors[i], titles[i]), (xs[i], ys[i]))
 plt.show()
