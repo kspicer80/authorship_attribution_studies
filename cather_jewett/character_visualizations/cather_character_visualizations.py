@@ -88,7 +88,7 @@ pprint(Counter(named_entities).most_common(50))
 
 # -
 
-# It seems like the Wikipedia list was probably good enough. 
+# It seems like the Wikipedia list was probably good enough.
 
 # +
 # Now we want to write some functions—first one will find "connections" between characters: if two characters' names appear in a chapter, we'll call them "connected":
@@ -167,7 +167,6 @@ plt.imshow(mtx,
            norm=matplotlib.colors.LogNorm(),
            interpolation='nearest',
            cmap='RdPu')
-
 
 alpha_cast = sorted(cast)
 alpha_mtx = character_matrix(text, alpha_cast)
